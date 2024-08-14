@@ -19,7 +19,7 @@ const GroqComponent = () => {
       messages: [
         {
           role: "user",
-          content: "what is the fastest car in the world?",
+          content: prompt,
         },
       ],
       model: "llama3-8b-8192",
@@ -30,11 +30,8 @@ const GroqComponent = () => {
       stop: null,
     });
 
-    console.log("Chat completion: ", chatCompletion);
-
     const response = chatCompletion.choices[0].message.content ?? "No response";
 
-    console.log(response);
     setResponse(response.replace(/\n/g, "<br />"));
   };
 
