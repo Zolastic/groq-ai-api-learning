@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
+import { Send } from "lucide-react";
 
 const GroqComponent = () => {
   const [prompt, setPrompt] = useState("");
@@ -29,9 +30,14 @@ const GroqComponent = () => {
 
   return (
     <div className="flex flex-col gap-y-4 w-full items-center justify-center">
-      <div className="flex gap-x-2 items-center justify-center w-1/5">
-        <Input value={prompt} onChange={(e) => setPrompt(e.target.value)} />
-        <Button onClick={handlePrompt}>Submit</Button>
+      <div className="flex gap-x-2 items-end justify-center w-1/5">
+        <Textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+        <Button
+          onClick={handlePrompt}
+          className="flex justify-center items-center"
+        >
+          <Send size={16} />
+        </Button>
       </div>
       {response && (
         <div className="flex flex-col gap-x-2 w-4/5">
