@@ -3,36 +3,28 @@
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import Groq from "groq-sdk";
 
 const GroqComponent = () => {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
 
-  const groq = new Groq({
-    apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
-    dangerouslyAllowBrowser: true,
-  });
-
   const handlePrompt = async () => {
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      model: "llama3-8b-8192",
-      temperature: 1,
-      max_tokens: 1024,
-      top_p: 1,
-      stream: false,
-      stop: null,
+    const groqApiResponse = await fetch("/api/groq-api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
     });
 
-    const response = chatCompletion.choices[0].message.content ?? "No response";
+    const response = await groqApiResponse.json();
 
-    setResponse(response.replace(/\n/g, "<br />"));
+    setResponse(
+      response.response
+        .replace(/(?:\r\n|\r|\n)/g, "<br>")
+        .replace(/  /g, "&nbsp;&nbsp;")
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    );
   };
 
   return (
