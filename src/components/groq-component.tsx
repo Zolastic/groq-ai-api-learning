@@ -11,8 +11,6 @@ const GroqComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePrompt = async () => {
-    setIsLoading(true);
-
     const groqApiResponse = await fetch("/api/groq-api", {
       method: "POST",
       headers: {
@@ -28,6 +26,7 @@ const GroqComponent = () => {
         .replace(/(?:\r\n|\r|\n)/g, "<br>")
         .replace(/  /g, "&nbsp;&nbsp;")
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\* (.*?)<br>/g, "&nbsp;&nbsp;- $1<br>")
     );
 
     setIsLoading(false);
