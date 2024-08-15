@@ -3,13 +3,16 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { Send } from "lucide-react";
+import { LoaderCircle, Send } from "lucide-react";
 
 const GroqComponent = () => {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePrompt = async () => {
+    setIsLoading(true);
+
     const groqApiResponse = await fetch("/api/groq-api", {
       method: "POST",
       headers: {
@@ -26,6 +29,8 @@ const GroqComponent = () => {
         .replace(/  /g, "&nbsp;&nbsp;")
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     );
+
+    setIsLoading(false);
   };
 
   return (
@@ -36,7 +41,11 @@ const GroqComponent = () => {
           onClick={handlePrompt}
           className="flex justify-center items-center"
         >
-          <Send size={16} />
+          {!isLoading ? (
+            <Send size={16} />
+          ) : (
+            <LoaderCircle size={16} className="animate-spin" />
+          )}
         </Button>
       </div>
       {response && (
