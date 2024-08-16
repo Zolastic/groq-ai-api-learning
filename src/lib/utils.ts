@@ -12,12 +12,30 @@ export const extractValue = (item: any): any => {
     if (item.value !== undefined) {
       return extractValue(item.value);
     } else if (item.items !== undefined) {
-      console.log("Extracting value from items:", item.items);
       return extractValue(item.items);
     } else if (item.properties !== undefined) {
       return extractValue(item.properties);
+    } else if (
+      item.level !== undefined &&
+      item.level.value !== undefined &&
+      item.name !== undefined &&
+      item.name.value !== undefined
+    ) {
+      return { name: item.name.value, level: item.level.value };
+    } else if (
+      item.description !== undefined &&
+      item.description.value !== undefined
+    ) {
+      return item.description.value;
     } else {
-      return item.description || item.name || item.level || item.title || "";
+      return (
+        item.description ||
+        (item.description && item.description.value) ||
+        item.name ||
+        (item.name && item.name.value) ||
+        item.title ||
+        ""
+      );
     }
   } else {
     return item !== undefined ? item : "";
@@ -36,7 +54,6 @@ export const ensureString = (value: any): string => {
 };
 
 export const ensureArray = (value: any): any[] => {
-  console.log("Ensuring array for value:", value);
   const extracted = extractValue(value);
   if (Array.isArray(extracted)) {
     return extracted;

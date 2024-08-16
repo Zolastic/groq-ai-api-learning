@@ -26,8 +26,6 @@ const JobDescriptionGenerator = () => {
 
       const data = await response.json();
 
-      console.log("response: ", data.response);
-
       const normalizedResponse = {
         job_title: ensureString(
           data.response.job_title || data.response.properties?.job_title
