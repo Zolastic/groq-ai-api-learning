@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       },
     ],
     model: "llama3-8b-8192",
-    temperature: 0.7,
+    temperature: 0.2,
     max_tokens: 1024,
     top_p: 1,
     stream: false,

@@ -9,18 +9,18 @@ export const extractValue = (item: any): any => {
   if (Array.isArray(item)) {
     return item.map((i) => extractValue(i));
   } else if (item && typeof item === "object") {
-    if (item.value) {
+    if (item.value !== undefined) {
       return extractValue(item.value);
-    } else if (item.items) {
+    } else if (item.items !== undefined) {
+      console.log("Extracting value from items:", item.items);
       return extractValue(item.items);
-    } else if (item.properties) {
+    } else if (item.properties !== undefined) {
       return extractValue(item.properties);
     } else {
-      // Return a specific property if it's not just 'value'
-      return item.description || item.name || item; // Handle common cases
+      return item.description || item.name || item.level || "";
     }
   } else {
-    return item;
+    return item !== undefined ? item : "";
   }
 };
 
@@ -29,19 +29,20 @@ export const ensureString = (value: any): string => {
   if (typeof extracted === "string") {
     return extracted;
   } else if (extracted && typeof extracted === "object" && extracted.title) {
-    return extractValue(extracted.title); // Attempt to extract title if it's an object
+    return extractValue(extracted.title);
   } else {
-    return ""; // Default to an empty string if nothing valid is found
+    return "";
   }
 };
 
 export const ensureArray = (value: any): any[] => {
+  console.log("Ensuring array for value:", value);
   const extracted = extractValue(value);
   if (Array.isArray(extracted)) {
     return extracted;
   } else if (extracted !== undefined && extracted !== null) {
     return [extracted]; // Wrap non-array value in an array
   } else {
-    return []; // Return an empty array if value is undefined or null
+    return [];
   }
 };

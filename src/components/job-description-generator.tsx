@@ -24,25 +24,28 @@ const JobDescriptionGenerator = () => {
 
     const data = await groqApiResponse.json();
 
+    console.log("response: ", data.response);
+
     const normalizedResponse = {
-      job_title:
-        ensureString(data.response.job_title) ||
-        ensureString(data.response.properties?.job_title),
-      company_name:
-        ensureString(data.response.company_name) ||
-        ensureString(data.response.properties?.company_name),
-      location:
-        ensureString(data.response.location) ||
-        ensureString(data.response.properties?.location),
-      skills:
-        ensureArray(data.response.skills) ||
-        ensureArray(data.response.properties?.skills),
-      responsibilities:
-        ensureArray(data.response.responsibilities) ||
-        ensureArray(data.response.properties?.responsibilities),
-      qualifications:
-        ensureArray(data.response.qualifications) ||
-        ensureArray(data.response.properties?.qualifications),
+      job_title: ensureString(
+        data.response.job_title || data.response.properties?.job_title
+      ),
+      company_name: ensureString(
+        data.response.company_name || data.response.properties?.company_name
+      ),
+      location: ensureString(
+        data.response.location || data.response.properties?.location
+      ),
+      skills: ensureArray(
+        data.response.skills || data.response.properties?.skills
+      ),
+      responsibilities: ensureArray(
+        data.response.responsibilities ||
+          data.response.properties?.responsibilities
+      ),
+      qualifications: ensureArray(
+        data.response.qualifications || data.response.properties?.qualifications
+      ),
     };
 
     setResponse(normalizedResponse);
