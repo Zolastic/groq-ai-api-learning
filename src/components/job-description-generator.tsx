@@ -5,6 +5,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { LoaderCircle, Send } from "lucide-react";
 import { ensureArray, ensureString } from "@/lib/utils";
+import { toast } from "sonner";
 
 const JobDescriptionGenerator = () => {
   const [prompt, setPrompt] = useState("");
@@ -14,42 +15,49 @@ const JobDescriptionGenerator = () => {
   const handlePrompt = async () => {
     setIsLoading(true);
 
-    const groqApiResponse = await fetch("/api/job-description", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    });
+    try {
+      const response = await fetch("/api/job-description", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
 
-    const data = await groqApiResponse.json();
+      const data = await response.json();
 
-    console.log("response: ", data.response);
+      console.log("response: ", data.response);
 
-    const normalizedResponse = {
-      job_title: ensureString(
-        data.response.job_title || data.response.properties?.job_title
-      ),
-      company_name: ensureString(
-        data.response.company_name || data.response.properties?.company_name
-      ),
-      location: ensureString(
-        data.response.location || data.response.properties?.location
-      ),
-      skills: ensureArray(
-        data.response.skills || data.response.properties?.skills
-      ),
-      responsibilities: ensureArray(
-        data.response.responsibilities ||
-          data.response.properties?.responsibilities
-      ),
-      qualifications: ensureArray(
-        data.response.qualifications || data.response.properties?.qualifications
-      ),
-    };
+      const normalizedResponse = {
+        job_title: ensureString(
+          data.response.job_title || data.response.properties?.job_title
+        ),
+        company_name: ensureString(
+          data.response.company_name || data.response.properties?.company_name
+        ),
+        location: ensureString(
+          data.response.location || data.response.properties?.location
+        ),
+        skills: ensureArray(
+          data.response.skills || data.response.properties?.skills
+        ),
+        responsibilities: ensureArray(
+          data.response.responsibilities ||
+            data.response.properties?.responsibilities
+        ),
+        qualifications: ensureArray(
+          data.response.qualifications ||
+            data.response.properties?.qualifications
+        ),
+      };
 
-    setResponse(normalizedResponse);
-    setIsLoading(false);
+      setResponse(normalizedResponse);
+    } catch (error) {
+      console.error("Failed to fetch job description:", error);
+      toast.error("Failed to fetch job description.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
