@@ -69,18 +69,24 @@ const JobDescriptionGenerator = () => {
       </div>
       {response && (
         <div className="flex flex-col gap-x-2 w-4/5">
-          <h1 className="text-lg">Job Title: {response.job_title}</h1>
-          <p>
-            <strong>Company:</strong> {response.company_name}
+          <h1 className="tracking-tight">
+            <span className="font-bold text-lg">Job Title:</span>{" "}
+            {response.job_title}
+          </h1>
+          <p className="tracking-tight">
+            <span className="font-bold text-lg">Company:</span>{" "}
+            {response.company_name}
           </p>
-          <p>
-            <strong>Location:</strong> {response.location}
+          <p className="tracking-tight">
+            <span className="font-bold text-lg">Location:</span>{" "}
+            {response.location}
           </p>
 
-          <h2 className="text-md mt-4">Skills Required:</h2>
+          <h2 className="mt-4 font-semibold text-lg">Skills Required:</h2>
           <ul>
             {response.skills.map((skill: any, index: number) => (
-              <li key={index}>
+              <li key={index} className="ml-2">
+                {`${index + 1}. `}
                 {typeof skill === "object"
                   ? `${skill.name} (${skill.level})`
                   : skill}
@@ -88,24 +94,22 @@ const JobDescriptionGenerator = () => {
             ))}
           </ul>
 
-          <h2 className="text-md mt-4">Responsibilities:</h2>
+          <h2 className="mt-4 font-semibold text-lg">Responsibilities:</h2>
           <ul>
             {response.responsibilities.map((resp: any, index: number) => (
-              <li key={index}>
-                {typeof resp === "object"
-                  ? `${index + 1}. ${resp.description}`
-                  : resp}
+              <li key={index} className="ml-2">
+                {`${index + 1}. `}
+                {typeof resp === "object" ? resp.description : resp}
               </li>
             ))}
           </ul>
 
-          <h2 className="text-md mt-4">Qualifications:</h2>
+          <h2 className="mt-4 font-semibold text-lg">Qualifications:</h2>
           <ul>
             {response.qualifications.map((qual: any, index: number) => (
-              <li key={index}>
-                {typeof qual === "object"
-                  ? `${index + 1}. ${qual.description}`
-                  : qual}
+              <li key={index} className="ml-2">
+                {`${index + 1}. `}
+                {typeof qual === "object" ? qual.description : qual}
               </li>
             ))}
           </ul>

@@ -17,7 +17,7 @@ export const extractValue = (item: any): any => {
     } else if (item.properties !== undefined) {
       return extractValue(item.properties);
     } else {
-      return item.description || item.name || item.level || "";
+      return item.description || item.name || item.level || item.title || "";
     }
   } else {
     return item !== undefined ? item : "";
@@ -41,7 +41,7 @@ export const ensureArray = (value: any): any[] => {
   if (Array.isArray(extracted)) {
     return extracted;
   } else if (extracted !== undefined && extracted !== null) {
-    return [extracted]; // Wrap non-array value in an array
+    return [extracted];
   } else {
     return [];
   }
