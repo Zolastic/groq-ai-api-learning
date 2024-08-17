@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { LoaderCircle, Send } from "lucide-react";
-import { ensureArray, ensureString } from "@/lib/utils";
 import { toast } from "sonner";
 
 const JobDescriptionGenerator = () => {
@@ -26,30 +25,17 @@ const JobDescriptionGenerator = () => {
 
       const data = await response.json();
 
-      const normalizedResponse = {
-        job_title: ensureString(
-          data.response.job_title || data.response.properties?.job_title
-        ),
-        company_name: ensureString(
-          data.response.company_name || data.response.properties?.company_name
-        ),
-        location: ensureString(
-          data.response.location || data.response.properties?.location
-        ),
-        skills: ensureArray(
-          data.response.skills || data.response.properties?.skills
-        ),
-        responsibilities: ensureArray(
-          data.response.responsibilities ||
-            data.response.properties?.responsibilities
-        ),
-        qualifications: ensureArray(
-          data.response.qualifications ||
-            data.response.properties?.qualifications
-        ),
+      const normalizedResponse: JobDescription = {
+        job_title: data.response.job_title,
+        company_name: data.response.company_name,
+        location: data.response.location,
+        skills: data.response.skills,
+        responsibilities: data.response.responsibilities,
+        qualifications: data.response.qualifications,
       };
 
       setResponse(normalizedResponse);
+      toast.success("Job description generated successfully!");
     } catch (error) {
       console.error("Failed to fetch job description:", error);
       toast.error("Failed to fetch job description.");
@@ -60,7 +46,7 @@ const JobDescriptionGenerator = () => {
 
   return (
     <div className="flex flex-col gap-y-4 w-full items-center justify-center">
-      <div className="flex gap-x-2 items-end justify-center w-1/5">
+      <div className="flex gap-x-2 items-end justify-center w-1/2">
         <Textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} />
         <Button
           onClick={handlePrompt}
@@ -90,32 +76,27 @@ const JobDescriptionGenerator = () => {
 
           <h2 className="mt-4 font-semibold text-lg">Skills Required:</h2>
           <ul>
-            {response.skills.map((skill: any, index: number) => (
+            {response.skills.map((skill, index) => (
               <li key={index} className="ml-2">
-                {`${index + 1}. `}
-                {typeof skill === "object"
-                  ? `${skill.name} (${skill.level})`
-                  : skill}
+                {`${index + 1}. ${skill.name} (${skill.level})`}
               </li>
             ))}
           </ul>
 
           <h2 className="mt-4 font-semibold text-lg">Responsibilities:</h2>
           <ul>
-            {response.responsibilities.map((resp: any, index: number) => (
+            {response.responsibilities.map((resp, index) => (
               <li key={index} className="ml-2">
-                {`${index + 1}. `}
-                {typeof resp === "object" ? resp.description : resp}
+                {`${index + 1}. ${resp.description}`}
               </li>
             ))}
           </ul>
 
           <h2 className="mt-4 font-semibold text-lg">Qualifications:</h2>
           <ul>
-            {response.qualifications.map((qual: any, index: number) => (
+            {response.qualifications.map((qual, index) => (
               <li key={index} className="ml-2">
-                {`${index + 1}. `}
-                {typeof qual === "object" ? qual.description : qual}
+                {`${index + 1}. ${qual.description}`}
               </li>
             ))}
           </ul>
