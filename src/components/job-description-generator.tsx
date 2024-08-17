@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { LoaderCircle, Send } from "lucide-react";
 import { toast } from "sonner";
+import { AutosizeTextarea } from "./ui/autosize-textarea";
 
 const JobDescriptionGenerator = () => {
   const [prompt, setPrompt] = useState("");
@@ -47,7 +47,12 @@ const JobDescriptionGenerator = () => {
   return (
     <div className="flex flex-col gap-y-4 w-full items-center justify-center">
       <div className="flex gap-x-2 items-end justify-center w-1/2">
-        <Textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+        <AutosizeTextarea
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="What information do you have for the job description?"
+          maxHeight={200}
+        />
         <Button
           onClick={handlePrompt}
           className="flex justify-center items-center"
