@@ -6,7 +6,6 @@ export async function POST(request: Request) {
 
   const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
-    dangerouslyAllowBrowser: true,
   });
 
   const chatCompletion = await groq.chat.completions.create({
